@@ -1,0 +1,252 @@
+CREATE SCHEMA Biblioteca;
+USE Biblioteca;
+
+CREATE TABLE USUARIO (
+    cpf char(14) PRIMARY KEY,
+    primeiroNome varchar(20),
+    nomeMeio varchar(20),
+    ultimoNome varchar(20),
+    logradouro Varchar(50),
+    numero INT,
+    bairro varchar(25),
+    cidade varchar(20),
+    estado Varchar(20),
+    email varchar(60),
+    nome_do_curso Varchar(60)
+);
+
+CREATE TABLE OBRA (
+    isbn char(11) PRIMARY KEY,
+    titulo varchar(30),
+    edicao int,
+    classificacao VARCHAR(25),
+    idioma VARCHAR(25),
+    ano_publicacao INT,
+    FK_EDITORA_id_editora INT not null
+);
+
+CREATE TABLE EDITORA (
+    id_editora INT PRIMARY KEY,
+    nome Varchar(30),
+    cidade Varchar(25)
+);
+
+CREATE TABLE AUTOR (
+    id_autor INT PRIMARY KEY,
+    nome Varchar(20),
+    sobrenome Varchar(20),
+    nacionalidade Varchar(20)
+);
+
+CREATE TABLE TELEFONE (
+    ddd char(3),
+    numero char(9),
+    FK_USUARIO_cpf char(14),
+    PRIMARY KEY (ddd, numero)
+);
+
+CREATE TABLE EMPRESTIMO (
+    fk_USUARIO_cpf char(14),
+    fk_OBRA_isbn char(11),
+    dtEmprestimo date,
+    dtDevolucaoPrevista date,
+    dtDevolucao date,
+    PRIMARY KEY (dtEmprestimo, fk_USUARIO_cpf, fk_OBRA_isbn)
+);
+
+CREATE TABLE OBRA_AUTOR (
+    fk_AUTOR_id_autor INT,
+    fk_OBRA_isbn char(11),
+    PRIMARY KEY (fk_AUTOR_id_autor, fk_OBRA_isbn)
+);
+
+ALTER TABLE OBRA ADD CONSTRAINT FK_OBRA_2
+    FOREIGN KEY (FK_EDITORA_id_editora)
+    REFERENCES EDITORA (id_editora)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+ 
+ALTER TABLE TELEFONE ADD CONSTRAINT FK_TELEFONE_2
+    FOREIGN KEY (FK_USUARIO_cpf)
+    REFERENCES USUARIO (cpf)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE; 
+ 
+ALTER TABLE EMPRESTIMO ADD CONSTRAINT FK_EMPRESTIMO_2
+    FOREIGN KEY (fk_USUARIO_cpf)
+    REFERENCES USUARIO (cpf)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE;
+ 
+ALTER TABLE EMPRESTIMO ADD CONSTRAINT FK_EMPRESTIMO_3
+    FOREIGN KEY (fk_OBRA_isbn)
+    REFERENCES OBRA (isbn)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE;                                                                       
+ 
+ALTER TABLE OBRA_AUTOR ADD CONSTRAINT FK_OBRA_AUTOR_1
+    FOREIGN KEY (fk_AUTOR_id_autor)
+    REFERENCES AUTOR (id_autor)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+ 
+ALTER TABLE OBRA_AUTOR ADD CONSTRAINT FK_OBRA_AUTOR_2
+    FOREIGN KEY (fk_OBRA_isbn)
+    REFERENCES OBRA (isbn)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+    
+INSERT INTO `biblioteca`.`usuario` (`cpf`, `primeiroNome`, `nomeMeio`, `ultimoNome`, `logradouro`, `numero`, `bairro`, `cidade`, `estado`, `email`, `nome_do_curso`) VALUES ('111', 'Chris', 'Santana', 'Soares', 'Rua da paz', '11', 'Bonfim', 'Salvador', 'BA', 'chris@gmail.com', 'DS');
+INSERT INTO `biblioteca`.`usuario` (`cpf`, `primeiroNome`, `ultimoNome`, `logradouro`, `numero`, `bairro`, `cidade`, `estado`, `email`, `nome_do_curso`) VALUES ('222', 'Jose', 'Lima', 'Rua do céu', '5', 'Itaigara', 'Salvador', 'BA', 'jose@gmail.com', 'DS');
+INSERT INTO `biblioteca`.`usuario` (`cpf`, `primeiroNome`, `nomeMeio`, `ultimoNome`, `numero`, `bairro`, `cidade`, `estado`, `nome_do_curso`) VALUES ('333', 'Maria', 'Lemos', 'Silva', '37', 'Pituba', 'Salvador', 'BA', 'RC');
+INSERT INTO `biblioteca`.`usuario` (`cpf`, `primeiroNome`, `nomeMeio`, `ultimoNome`, `logradouro`, `numero`, `bairro`, `cidade`, `estado`, `email`) VALUES ('444', 'Joao', 'Silva', 'Santana', 'Rua da liberdade', '22', 'Ribeira', 'Rio de Janeiro', 'BA', 'joao@hotmail.com');
+INSERT INTO `biblioteca`.`usuario` (`cpf`, `primeiroNome`, `nomeMeio`, `ultimoNome`, `logradouro`, `numero`, `bairro`, `cidade`, `estado`, `email`, `nome_do_curso`) VALUES ('555', 'Carla', 'Santos', 'Lemos', 'Rua do céu', '6', 'Itaigara', 'Salvador', 'BA', 'carla@gmail.com', 'RC');
+INSERT INTO `biblioteca`.`usuario` (`cpf`, `primeiroNome`, `ultimoNome`, `logradouro`, `numero`, `bairro`, `cidade`, `estado`, `email`, `nome_do_curso`) VALUES ('666', 'Marcia', 'Santos', 'Av Brasil', '7', 'Iguatemi', 'Rio de Janeiro', 'RJ', 'marcia@gmail.com', 'AUT');
+INSERT INTO `biblioteca`.`usuario` (`cpf`, `primeiroNome`, `nomeMeio`, `logradouro`, `numero`, `bairro`, `cidade`, `estado`, `nome_do_curso`) VALUES ('777', 'Andre', 'Sousa', 'Alamenda das Flores', '66', 'Castelo Branco', 'Salvador', 'BA', 'DS');
+INSERT INTO `biblioteca`.`usuario` (`cpf`, `primeiroNome`, `nomeMeio`, `ultimoNome`, `logradouro`, `numero`, `bairro`, `cidade`, `estado`, `nome_do_curso`) VALUES ('888', 'Luiz', 'Vasconcelos', 'Santos', 'Rua da Paciencia', '7', 'Copacabana', 'Rio de Janeiro', 'RJ', 'RC');
+INSERT INTO `biblioteca`.`usuario` (`cpf`, `primeiroNome`, `nomeMeio`, `ultimoNome`, `bairro`, `cidade`, `estado`, `email`) VALUES ('999', 'Ana', 'Souza', 'Silva', 'Riberia', 'Salvador', 'BA', 'ana@gmail.com');
+
+
+INSERT INTO `biblioteca`.`editora` (`id_editora`, `nome`, `cidade`) VALUES ('1', 'ABC', 'Salvador');
+INSERT INTO `biblioteca`.`editora` (`id_editora`, `nome`, `cidade`) VALUES ('2', 'Tra la la ', 'Rio de Janeiro');
+INSERT INTO `biblioteca`.`editora` (`id_editora`, `nome`, `cidade`) VALUES ('3', 'Letras', 'São Paulo');
+INSERT INTO `biblioteca`.`editora` (`id_editora`, `nome`, `cidade`) VALUES ('4', 'Erica', 'Salvador');
+
+
+INSERT INTO `biblioteca`.`obra` (`isbn`, `titulo`, `edicao`, `classificacao`, `idioma`, `ano_publicacao`, `FK_EDITORA_id_editora`) VALUES ('11111', 'Pequeno Principe', '1', 'Romance', 'Ingles', '1999', '1');
+INSERT INTO `biblioteca`.`obra` (`isbn`, `titulo`, `edicao`, `classificacao`, `idioma`, `ano_publicacao`, `FK_EDITORA_id_editora`) VALUES ('22222', 'C completo e total', '1', 'Tecnico', 'Portugues', '2001', '2');
+INSERT INTO `biblioteca`.`obra` (`isbn`, `titulo`, `edicao`, `classificacao`, `idioma`, `ano_publicacao`, `FK_EDITORA_id_editora`) VALUES ('33333', 'Volta ao mundo', '3', 'Ficcao', 'Ingles', '2010', '1');
+INSERT INTO `biblioteca`.`obra` (`isbn`, `titulo`, `edicao`, `classificacao`, `idioma`, `ano_publicacao`, `FK_EDITORA_id_editora`) VALUES ('44444', 'Python', '2', 'Tecnico', 'Ingles', '2009', '3');
+INSERT INTO `biblioteca`.`obra` (`isbn`, `titulo`, `edicao`, `classificacao`, `idioma`, `ano_publicacao`, `FK_EDITORA_id_editora`) VALUES ('55555', 'Banco de dados', '1', 'Tecnico', 'Portugues', '2020', '1');
+INSERT INTO `biblioteca`.`obra` (`isbn`, `titulo`, `edicao`, `classificacao`, `idioma`, `ano_publicacao`, `FK_EDITORA_id_editora`) VALUES ('66666', 'E o vento levou', '1', 'Drama', 'Portugues', '2021', '2');
+INSERT INTO `biblioteca`.`obra` (`isbn`, `titulo`, `edicao`, `classificacao`, `idioma`, `ano_publicacao`, `FK_EDITORA_id_editora`) VALUES ('77777', 'Marcelo, Marmelo, Martelo', '4', 'Romance', 'Espanhol', '2021', '1');
+INSERT INTO `biblioteca`.`obra` (`isbn`, `titulo`, `edicao`, `classificacao`, `ano_publicacao`, `FK_EDITORA_id_editora`) VALUES ('88888', 'Engenharia de SW', '2', 'Tecnico', '2023', '3');
+INSERT INTO `biblioteca`.`obra` (`isbn`, `titulo`, `edicao`, `idioma`, `ano_publicacao`, `FK_EDITORA_id_editora`) VALUES ('99999', 'Pequena luz azul', '1', 'Portugues', '2021', '1');
+
+
+INSERT INTO `biblioteca`.`telefone` (`ddd`, `numero`, `FK_USUARIO_cpf`) VALUES ('071', '111', '111');
+INSERT INTO `biblioteca`.`telefone` (`ddd`, `numero`, `FK_USUARIO_cpf`) VALUES ('071', '222', '222');
+INSERT INTO `biblioteca`.`telefone` (`ddd`, `numero`, `FK_USUARIO_cpf`) VALUES ('074', '111', '333');
+INSERT INTO `biblioteca`.`telefone` (`ddd`, `numero`, `FK_USUARIO_cpf`) VALUES ('075', '111', '111');
+INSERT INTO `biblioteca`.`telefone` (`ddd`, `numero`, `FK_USUARIO_cpf`) VALUES ('071', '333', '444');
+INSERT INTO `biblioteca`.`telefone` (`ddd`, `numero`, `FK_USUARIO_cpf`) VALUES ('011', '111', '444');
+INSERT INTO `biblioteca`.`telefone` (`ddd`, `numero`, `FK_USUARIO_cpf`) VALUES ('031', '555', '222');
+INSERT INTO `biblioteca`.`telefone` (`ddd`, `numero`, `FK_USUARIO_cpf`) VALUES ('021', '657', '666');
+INSERT INTO `biblioteca`.`telefone` (`ddd`, `numero`, `FK_USUARIO_cpf`) VALUES ('071', '227', '777');
+INSERT INTO `biblioteca`.`telefone` (`ddd`, `numero`, `FK_USUARIO_cpf`) VALUES ('074', '226', '777');
+
+INSERT INTO `biblioteca`.`autor` (`id_autor`, `nome`, `sobrenome`, `nacionalidade`) VALUES ('1', 'Jose', 'Machado', 'Brasil');
+INSERT INTO `biblioteca`.`autor` (`id_autor`, `nome`, `sobrenome`, `nacionalidade`) VALUES ('2', 'Ana ', 'Liz', 'Estados Unidos');
+INSERT INTO `biblioteca`.`autor` (`id_autor`, `nome`, `sobrenome`, `nacionalidade`) VALUES ('3', 'Carla', 'Assis', 'Estatos Unidos');
+INSERT INTO `biblioteca`.`autor` (`id_autor`, `nome`, `sobrenome`, `nacionalidade`) VALUES ('4', 'Mara', 'Quintana', 'Brasil');
+INSERT INTO `biblioteca`.`autor` (`id_autor`, `nome`, `sobrenome`, `nacionalidade`) VALUES ('5', 'Joao', 'Arcanjo', 'Belgica');
+INSERT INTO `biblioteca`.`autor` (`id_autor`, `nome`, `sobrenome`, `nacionalidade`) VALUES ('6', 'Jose', 'Andrade', 'França');
+INSERT INTO `biblioteca`.`autor` (`id_autor`, `nome`, `sobrenome`, `nacionalidade`) VALUES ('7', 'Maria', 'Amelia', 'Brasil');
+INSERT INTO `biblioteca`.`autor` (`id_autor`, `nome`, `sobrenome`, `nacionalidade`) VALUES ('8', 'Thales', 'Azevedo', 'Estados Unidos');
+INSERT INTO `biblioteca`.`autor` (`id_autor`, `nome`, `sobrenome`, `nacionalidade`) VALUES ('9', 'Joana', 'Katia', 'Brasil');
+
+
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('1', '11111');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('2', '11111');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('3', '11111');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('4', '22222');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('1', '22222');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('5', '33333');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('1', '44444');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('2', '55555');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('6', '55555');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('7', '55555');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('7', '66666');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('8', '77777');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('9', '88888');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('1', '99999');
+INSERT INTO `biblioteca`.`obra_autor` (`fk_AUTOR_id_autor`, `fk_OBRA_isbn`) VALUES ('2', '99999');
+
+INSERT INTO `biblioteca`.`emprestimo` (`fk_USUARIO_cpf`, `fk_OBRA_isbn`, `dtEmprestimo`, `dtDevolucaoPrevista`) VALUES ('111', '11111', '2024-10-10', '2024-10-15');
+INSERT INTO `biblioteca`.`emprestimo` (`fk_USUARIO_cpf`, `fk_OBRA_isbn`, `dtEmprestimo`, `dtDevolucaoPrevista`) VALUES ('111', '22222', '2024-10-08', '2024-10-13');
+INSERT INTO `biblioteca`.`emprestimo` (`fk_USUARIO_cpf`, `fk_OBRA_isbn`, `dtEmprestimo`, `dtDevolucaoPrevista`, `dtDevolucao`) VALUES ('222', '33333', '2024-09-01', '2024-09-06', '2024-09-06');
+INSERT INTO `biblioteca`.`emprestimo` (`fk_USUARIO_cpf`, `fk_OBRA_isbn`, `dtEmprestimo`, `dtDevolucaoPrevista`, `dtDevolucao`) VALUES ('222', '11111', '2024-09-15', '2024-09-21', '2024-10-01');
+INSERT INTO `biblioteca`.`emprestimo` (`fk_USUARIO_cpf`, `fk_OBRA_isbn`, `dtEmprestimo`, `dtDevolucaoPrevista`, `dtDevolucao`) VALUES ('333', '44444', '2024-05-05', '2024-05-11', '2024-05-11');
+INSERT INTO `biblioteca`.`emprestimo` (`fk_USUARIO_cpf`, `fk_OBRA_isbn`, `dtEmprestimo`, `dtDevolucaoPrevista`, `dtDevolucao`) VALUES ('444', '55555', '2024-09-01', '2024-09-06', '2024-09-05');
+INSERT INTO `biblioteca`.`emprestimo` (`fk_USUARIO_cpf`, `fk_OBRA_isbn`, `dtEmprestimo`, `dtDevolucaoPrevista`, `dtDevolucao`) VALUES ('555', '88888', '2024-10-10', '2024-10-16', '2024-10-16');
+
+-- Os dados dos autores cadastrados ordenado pelo nome e sobrenome
+select * from autor
+order by nome, sobrenome;
+
+-- Os dados das editoras cadastradas
+select * from editora;
+
+-- Os dados das obras ordenado de forma decrescente pelo ano de publicação
+select * from obra
+order by ano_publicacao desc;
+
+-- Os dados dos usuários cadastrados
+select * from usuario;
+
+--  Os dados das obras escritas em Português
+select * from obra
+where idioma = 'Portugues';
+
+-- O nome, sobrenome, email dos usuários que moram em salvador
+select concat(primeiroNome,' 'nomeMeio,' ',ultimoNome) as nome_completo, email from usuario
+where cidade = 'salvador';
+
+-- O nome, sobrenome, email dos usuários que moram no bairro bonfim em salvador
+select concat(primeiroNome,' ',nomeMeio,' ',ultimoNome) as nome_completo, email from usuario
+where cidade = 'salvador' and bairro = 'bonfim';
+
+-- O nome, sobrenome, email e telefone(s)  dos usuários que não informou um dos dados do endereço: Bairro, cidade, estado
+select concat(primeiroNome,' ',nomeMeio,' ',ultimoNome) as nome_completo, email, ddd, telefone.numero 
+from usuario, telefone
+where estado is null or cidade is null or bairro is null;
+
+select count(*)
+from usuario, telefone
+where estado is null or cidade is null or bairro is null;
+
+select concat(primeiroNome,' ',nomeMeio,' ',ultimoNome) as nome_completo, email, ddd, telefone.numero 
+from usuario, telefone
+where cpf = FK_USUARIO_cpf and (estado is null or cidade is null or bairro is null);
+
+-- O titulo, ano de publicação de todas as obras com a sua respectiva editora, 
+-- exibindo o nome e a cidade da editora
+select titulo, ano_publicacao, editora.nome, editora.cidade
+from obra, editora
+where FK_EDITORA_id_editora = FK_EDITORA_id_editora;
+
+-- O titulo, ano de publicação de todas as obras com seus respectivos autores, exibindo o nome, 
+-- sobrenome e a nacionalidade dos autores.
+select titulo, ano_publicacao, concat(autor.nome,' ',autor.sobrenome) as autor, autor.nacionalidade
+from obra, autor, obra_autor
+where isbn = fk_OBRA_isbn and id_autor = fk_AUTOR_id_autor
+order by isbn;
+
+-- O nome e sobrenome do usuário, o titulo da obra e seu idioma, a data de empréstimo, 
+-- a data de devolução prevista e a data de devolução de todos os empréstimos realizados
+select concat(primeiroNome,' ', ultimoNome) as nome_completo, obra.titulo, obra.idioma, emprestimo.dtEmprestimo, emprestimo.dtDevolucaoPrevista, emprestimo.dtDevolucao
+from usuario, obra, emprestimo
+where cpf = fk_USUARIO_cpf and isbn = fk_OBRA_isbn
+order by nome_completo;
+
+-- O nome e sobrenome do usuário, o titulo da obra e seu idioma, a data de empréstimo, 
+-- a data de devolução prevista de todos os empréstimos realizados sem devolução
+select concat(primeiroNome,' ', ultimoNome) as nome_completo, obra.titulo, obra.idioma, emprestimo.dtEmprestimo, emprestimo.dtDevolucaoPrevista, emprestimo.dtDevolucao
+from usuario, obra, emprestimo
+where cpf = fk_USUARIO_cpf and isbn = fk_OBRA_isbn and emprestimo.dtDevolucao is null;
+
+-- O nome e sobrenome do usuário, o titulo da obra e seu idioma, a data de empréstimo, 
+-- a data de devolução prevista de todos os empréstimos realizados com devolução atrasada (data prevista menor que  31/10/2024)
+select concat(primeiroNome,' ', ultimoNome) as nome_completo, obra.titulo, obra.idioma, emprestimo.dtEmprestimo, emprestimo.dtDevolucaoPrevista, emprestimo.dtDevolucao
+from usuario, obra, emprestimo
+where cpf = fk_USUARIO_cpf and isbn = fk_OBRA_isbn and emprestimo.dtDevolucao is null and emprestimo.dtDevolucaoPrevista < '2024-10-30';
+
+-- O nome e sobrenome do usuário, o titulo da obra e seu idioma, 
+-- a data de empréstimo, a data de devolução prevista de todos os empréstimos realizados entre os dias 15/10/2024 e 30/10/2024 
+select concat(primeiroNome,' ', ultimoNome) as nome_completo, obra.titulo, obra.idioma, emprestimo.dtEmprestimo, emprestimo.dtDevolucaoPrevista, emprestimo.dtDevolucao
+from usuario, obra, emprestimo
+where cpf = fk_USUARIO_cpf and isbn = fk_OBRA_isbn and emprestimo.dtEmprestimo between '2024-09-15' and '2024-09-30';
+
+
+
+
